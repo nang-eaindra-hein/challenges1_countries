@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+.root{
+    --primary-color:gray 950;
+
+
+}
+.text-primary{
+    color: var(--primary-color);
+}
