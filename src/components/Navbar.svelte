@@ -1,19 +1,18 @@
 <script>
-    import {Moon} from 'lucide-svelte';
+  import { Moon } from "lucide-svelte";
 </script>
 
-<div class="border border-stone-300 text-primary flex p-4 justify-between shadow-md" >
-    <div class="font-bold text-xl text-stone-700 ">
-    <p> Where is the world?</p>
+<div
+  class="border border-stone-300 text-primary flex p-8 justify-between shadow-md"
+>
+  <div class="font-bold text-xl text-stone-700">
+    <h1>Where is the world?</h1>
+  </div>
+
+  <button>
+    <div class="flex text-stone-700">
+      <Moon />
+      <div class="ms-1">Darkmode</div>
     </div>
-
-    <button>
-        <div class="text-sm flex text-stone-700 "><Moon/>
-            <div class="ms-1">Darkmode
-
-            </div>
-        </div>
-    </button>
-    
-
+  </button>
 </div>
