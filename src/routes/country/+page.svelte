@@ -1,54 +1,77 @@
-<script>
+<script lang="ts">
   import Back from "../../components/Back.svelte";
   import { MoveLeft } from "lucide-svelte";
+
+  let fields: any[""] = $state("");
+
+  const fetchFields = async () => {
+    const res = await fetch(
+      "https://restcountries.com/v3.1/all?fields=flags,name,borders,region,subregion,population,currencies,capital,languages,tld"
+    );
+    fields = await res.json();
+  };
+  fetchFields();
 </script>
 
-<div class=" flex-col h-screen w-full">
+<div class=" text-text bg-background flex-col h-screen w-full">
   <!--main screen-->
-  <div class=" pt-15 w-full'">
+  <div class=" text-text bg-background pt-15 w-full'">
     <!--div 2-->
 
     <div
-      class="ms-15 border flex justify-center items-center shadow-lg border-stone-200 rounded-lg w-40 h-10 text-sm"
+      class="ms-15 text-text bg-secondary border-secondary border flex justify-center items-center shadow-lgrounded-lg w-40 h-10 text-sm"
     >
       <!--back btn-->
-      <button class="flex">
+      <button class="text-text bg-secondary flex">
         <MoveLeft />
         <Back />
       </button>
     </div>
   </div>
   <!--------------------section3----------------------------------------------------->
-  <div class="bg-red--900 w-full pt-20 ms-15 flex">
+  <div class="text-text bg-background w-full pt-20 ms-15 flex">
     <!--main layout -->
 
-    <div
-      class="w-1/2 bg-blue-200 border border-stone-200 shadow-xl rounded-lg px-1 py-50"
-    >
+    <div class=" border shadow-xl rounded-lg w-200">
       <!--left div-->
-      <p>img</p>
+      {#each fields as field}
+        <div>
+          <img src={field.flags.png} alt="flags" class="display-block w-full" />
+        </div>
+      {/each}
     </div>
     <!--------------------section4----------------------------------------------------->
 
-    <div class="w-1/2 ms-15">
+    <div class="w-1/2 ms-30">
       <!--right div-->
-      <div class="font-bold text-xl text-stone-800 m-2">
+      <div class="text-text font-bold m-10 text-xl">
         <!--div1 title-->
         <h1>Country Name</h1>
       </div>
       <!--------------------section5----------------------------------------------------->
 
-      <div class="flex justify-evenly h-80">
+      <div class="text-text bg-background flex justify-evenly h-80">
         <!--div2 description body-->
 
-        <div class="flex-[1] bg-red-100">
+        <div class="flex-[1] text-lg">
           <!--div3 body1-->
-
-          <p>description1 of body</p>
+          {#each fields as field}
+            <div class="font-semibold">
+              Native Name:{field.name.nativenames}
+            </div>
+            <div class="font-semibold">Population :{field.population}</div>
+            <div class="font-semibold">Region :{field.region}</div>
+            <div class="font-semibold">Sub Region :{field.subregion}</div>
+            <div class="font-semibold">Capital :{field.capital}</div>
+          {/each}
         </div>
-        <div class="flex-[1] bg-yellow-200">
+        <div class="flex-[1]">
           <!--div4 body2-->
-          <p>description2 of body</p>
+          {#each fields as field}
+            <div class="font-semibold">Top Level Domain :{field.tld}</div>
+            <div class="font-semibold">Currencies :{field.currencies}</div>
+            <div class="font-semibold">Languages :{field.languages}</div>
+          {/each}
         </div>
       </div>
       <!--------------------section6----------------------------------------------------->
@@ -62,10 +85,14 @@
         </div>
 
         <div
-          class="border w-40 h-10 text-center rounded-lg p-1 border-stone-200 shadow-lg"
+          class="border border-secondary bg-secondary w-40 h-10 text-center rounded-lg p-1 shadow-lg"
         >
           <!--div7 border-country name-->
-          country name
+          {#each fields as field}
+            <div>
+              <button>{field.borders}</button>
+            </div>
+          {/each}
         </div>
       </div>
     </div>

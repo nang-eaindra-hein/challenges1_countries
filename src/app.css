@@ -1,10 +1,30 @@
 @import 'tailwindcss';
 
-.root{
-    --primary-color:gray 950;
 
+@layer base {
+
+    :root{
+        --text:#080d0a;
+        --background:#f2f8f4;
+        --primary:hsl(204, 5%, 19%);
+        --secondary:hsl(0, 5%, 93%);
+        --third:hsl(0,0%,99%);
+    }
+
+
+    :root.dark{
+        --text:#f2f7f4;
+        --primary:#070d09;
+        --background:hsl(209,23%,22%);
+        --secondary:hsl(214, 18%, 27%);
+    }
 
 }
-.text-primary{
-    color: var(--primary-color);
+
+@theme {
+    --color-text: var(--text);
+    --color-background: var(--background);
+    --color-primary: var(--primary);
+    --color-secondary: var(--secondary);
+    --color-third: var(--third);
 }
