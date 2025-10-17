@@ -27,7 +27,7 @@
     console.log(debouncedSearch);
   });
 
-  //debounce+filter yk efffect
+  //debounce+ filter yk efffect
   $effect(() => {
     const term = debouncedSearch.trim();
     const region = dropdown.trim();
