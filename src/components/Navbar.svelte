@@ -1,6 +1,7 @@
 <script lang="ts">
   import { Moon } from "lucide-svelte";
   import { onMount } from "svelte";
+
   let isDark: boolean = $state(false);
 
   onMount(() => {
@@ -23,7 +24,7 @@
   class="border border-primary bg-secondary flex p-8 justify-between shadow-md transition-colors duration-500 ease-in-out"
 >
   <div class="font-bold text-xl text-text">
-    <h1>Where is the world?</h1>
+    <a href="/"> <h1>Where is the world?</h1></a>
   </div>
 
   <button onclick={toggleDark}>

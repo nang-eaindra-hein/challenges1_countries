@@ -1,16 +1,71 @@
 <script lang="ts">
   import { Search } from "lucide-svelte";
 
+  //search+debounced
   let search = $state("");
-  let dropdown = $state("");
-  let fields: any[] = $state([]);
-  let africa = $state("africa");
+  let debouncedSearch = $state("");
 
+  //dropdown
+  let dropdown = $state("");
+
+  let fields: any[] = $state([]);
+
+  //debounce yk effect
   $effect(() => {
-    if (search) {
+    search;
+    const timeout = setTimeout(() => {
+      debouncedSearch = search;
+    }, 300);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+
+  //debounce yk console
+  $effect(() => {
+    console.log(debouncedSearch);
+  });
+
+  //debounce+filter yk efffect
+  $effect(() => {
+    const term = debouncedSearch.trim();
+    const region = dropdown.trim();
+    (async () => {
+      let url: string;
+
+      // search first, then filter by region locally
+      if (term && region) {
+        url = `https://restcountries.com/v3.1/name/${encodeURIComponent(term)}?fields=name,population,capital,region,subregion,flags`;
+      } else if (!term && region) {
+        // only region
+        url = `https://restcountries.com/v3.1/region/${encodeURIComponent(region)}?fields=name,population,capital,region,subregion,flags`;
+      } else if (term && !region) {
+        // only search
+        url = `https://restcountries.com/v3.1/name/${encodeURIComponent(term)}?fields=name,population,capital,region,subregion,flags`;
+      } else {
+        // neither
+        url = `https://restcountries.com/v3.1/all?fields=name,population,capital,region,subregion,flags`;
+      }
+
+      //fetch for url
+      const res = await fetch(url);
+      let data = res.ok ? await res.json() : [];
+
+      // when BOTH search and region are set, filter by region here
+      if (term && region) {
+        const result = region.toLowerCase();
+        data = data.filter((c: any) => c.region?.toLowerCase() === result);
+      }
+      fields = Array.isArray(data) ? data : [];
+    })();
+  });
+
+  /*$effect(() => {
+    if (debouncedSearch) {
       const searchedFields = async () => {
         const res = await fetch(
-          `https://restcountries.com/v3.1/name/${search}`
+          `https://restcountries.com/v3.1/name/${debouncedSearch}`
         );
         fields = await res.json();
       };
@@ -18,7 +73,7 @@
     } else {
       const fetchFields = async () => {
         const res = await fetch(
-          "https://restcountries.com/v3.1/all?fields=name,population,capital,region,subregion,flags,flag"
+          "https://restcountries.com/v3.1/all?fields=name,population,capital,region,subregion,flags"
         );
         fields = await res.json();
       };
@@ -26,15 +81,33 @@
     }
   });
 
-  function getAfrica() {
-    const africaFields = async () => {
+  /*$effect(() => {
+    if (!search && !dropdown) {
+      fields = countries;
+    }
+  });
+   $effect(() => {
+  const term = search.trim();
+    if (!term) {
+      fields = dropdown
+        ? countries.filter((c: any) => c.region === dropdown)
+        : countries;
+      return;
+    }
+    (async () => {
       const res = await fetch(
-        `https://restcountries.com/v3.1/all?fields=name,region/${africa}`
+        `https://restcountries.com/v3.1/name/${encodeURIComponent(term)}?fields=name,population,capital,region,subregion,flags,cca3`
       );
-      africa = await res.json();
-    };
-    africaFields();
-  }
+      fields = await res.json();
+    })();
+  });
+  $effect(() => {
+    if (!search) {
+      fields = dropdown
+        ? countries.filter((c: any) => c.region === dropdown)
+        : countries;
+    }
+  });
 
   /* $effect(() => {
     fetch(`https://restcountries.com/v3.1/name/${search}`)
@@ -76,7 +149,7 @@
   console.log(data);*/
 </script>
 
-<div class="flex-col h-screen w-full text-text bg-background">
+<div class="h-screen w-full text-text bg-background">
   <!--main screen-->
 
   <div
@@ -109,10 +182,7 @@
       <select bind:value={dropdown} class="w-full">
         <option value="" selected disabled>Filter by Region</option>
 
-        <!--<button onclick={getAfrica}
-          ><option value="Africa">Africa</option></button
-        >-->
-        <option value="America">America</option>
+        <option value="Americas">Americas</option>
         <option value="Asia">Asia</option>
         <option value="Europe">Europe</option>
         <option value="Oceania">Oceania</option>
@@ -128,32 +198,35 @@
     <!--box1-->
 
     <!--inside box1-->
-    {#each fields as field}
+
+    {#each fields as c}
       <div
         class="border border-secondary bg-secondary rounded-md shadow-lg m-25"
       >
-        <div>
-          <!--image-->
-          <img src={field.flags.png} alt="flag" class="w-full display-block" />
-        </div>
+        <a href={`/country/${c.name.common}`}>
+          <div>
+            <!--image-->
+            <img src={c.flags.png} alt="flag" class="w-full display-block" />
+          </div>
 
-        <div class="font-bold p-2 text-xl m-3">
-          <!--title-->
-          {field.name.common}
-        </div>
+          <div class="font-bold p-2 text-xl m-3">
+            <!--title-->
+            {c.name.common}
+          </div>
 
-        <div class="p-5">
-          <div>
-            <span class="font-semibold">Population: </span>{field.population}
+          <div class="p-5">
+            <div>
+              <span class="font-semibold">Population: </span>{c.population}
+            </div>
+            <div>
+              <span class="font-semibold">Region :</span>
+              {c.region}
+            </div>
+            <div>
+              <span class="font-semibold">Capital : </span>{c.capital}
+            </div>
           </div>
-          <div>
-            <span class="font-semibold">Region :</span>
-            {field.region}
-          </div>
-          <div>
-            <span class="font-semibold">Capital : </span>{field.capital}
-          </div>
-        </div>
+        </a>
       </div>
     {/each}
   </div>
