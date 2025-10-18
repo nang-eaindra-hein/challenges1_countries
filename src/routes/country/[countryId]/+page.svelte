@@ -50,41 +50,26 @@
     };
     fetchFields();
   });
-
-  /*$effect(() => {
-    const fetchFields = async () => {
-      const res = await fetch(
-        "https://restcountries.com/v3.1/name?fields=name,population,capital,region,subregion,flag,currency,lang,tld,borders"
-      );
-      fields = await res.json();
-    };
-   
-    for(const c of fields){
-      if (c.name.common.toLowerCase() === countryId.toLowerCase()) {
-          country = c;
-    }}
-     fetchFields();
-  });*/
 </script>
 
-<div class=" text-text bg-background flex-col h-screen w-full">
+<div class=" text-text transition:colors duration:150 flex-col h-screen w-full">
   <!--main screen-->
 
-  <div class=" text-text bg-background pt-15 w-full'">
+  <div class="pt-10">
     <!--div 2-->
     <Back />
   </div>
 
   <!--------------------section3----------------------------------------------------->
-  <div class="text-text bg-background w-full pt-20 ms-15 flex">
+  <div class="text-text w-full pt-20 ms-15 flex">
     <!--main layout -->
     {#if country}
-      <div class=" border shadow-xl rounded-lg w-200">
+      <div class="ms-8 shadow-4xl rounded-lg">
         <!--left div-->
 
         <div>
           <img
-            src={country.flags.png}
+            src={country.flags.svg}
             alt="flags"
             class="display-block w-full"
           />
@@ -92,77 +77,107 @@
       </div>
       <!--------------------section4----------------------------------------------------->
 
-      <div class="w-1/2 ms-30">
+      <div class="ms-20 w-full">
         <!--right div-->
-        <div class="text-text font-bold m-10 text-xl">
+        <div class="text-text font-semibold m-4 text-2xl">
           <!--div1 title-->
           <h1>{country.name.common}</h1>
         </div>
         <!--------------------section5----------------------------------------------------->
 
-        <div class="text-text bg-background flex justify-evenly h-80">
+        <div class="text-text flex justify-evenly w-200 h-50">
           <!--div2 description body-->
 
-          <div class="flex-[1] text-lg">
+          <div class="m-2 p-1 w-full">
             <!--div3 body1-->
 
-            <div class="font-semibold">
-              Native Name:{country.name.official}
+            <div class="flex w-full pb-1">
+              <div class="font-semibold text-md">Native Name</div>
+              <div class="font-light text-sm">: {country.name.official}</div>
             </div>
-            <div class="font-semibold">Population : {country.population}</div>
-            <div class="font-semibold">Region :{country.region}</div>
-            <div class="font-semibold">Sub Region :{country.subregion}</div>
-            <div class="font-semibold">Capital :{country.capital}</div>
-          </div>
-          <div class="flex-[1]">
-            <!--div4 body2-->
 
-            <div class="font-semibold">
-              Top Level Domain :{Object.values(country.tld).join(" , ")}
+            <div class="flex w-full pb-1">
+              <div class="font-semibold text-md">Population</div>
+              <div class="font-light text-sm">
+                : {country.population.toLocaleString()}
+              </div>
             </div>
-            <div class="font-semibold">
-              Currencies :{country.currencies
-                ? Object.values(country.currencies)
-                    .map((c: any) => c.name)
-                    .join(", ")
-                : "—"}
+
+            <div class="flex w-full pb-1">
+              <div class="font-semibold text-md">Region</div>
+              <div class="font-light text-sm">: {country.region}</div>
             </div>
-            <div class="font-semibold">
-              Languages :{Object.values(country.languages).join(" , ")}
+
+            <div class="flex w-full pb-1">
+              <div class="font-semibold text-md">Sub Region</div>
+              <div class="font-light text-sm">: {country.subregion}</div>
+            </div>
+
+            <div class="flex w-full">
+              <div class="font-semibold text-md">Capital</div>
+              <div class="font-light text-sm">: {country.capital}</div>
+            </div>
+          </div>
+
+          <div class="m-5 w-full">
+            <!--div4 body2-->
+            <div class="flex w-full pb-2">
+              <div class="font-semibold text-md">Top Level Domain</div>
+              <div class="font-light text-sm">
+                : {Object.values(country.tld).join(" , ")}
+              </div>
+            </div>
+
+            <div class="flex w-full pb-1">
+              <div class="font-semibold text-md">Currencies</div>
+              <div class="font-light text-sm">
+                : {country.currencies
+                  ? Object.values(country.currencies)
+                      .map((c: any) => c.name)
+                      .join(", ")
+                  : "—"}
+              </div>
+            </div>
+
+            <div class="flex w-full">
+              <div class="font-semibold text-md">Languages</div>
+              <div class="font-light text-sm">
+                : {Object.values(country.languages).join(" , ")}
+              </div>
             </div>
           </div>
         </div>
         <!--------------------section6----------------------------------------------------->
 
-        <div class="w-full pt-10 flex justify-start">
+        <div class="w-full flex justify-start">
           <!--div5 border-->
 
-          <div class="font-bold w-40">
+          <div class="font-semibold text-md w-40">
             <!--div6 border title-->
             <p>Border Countries :</p>
           </div>
 
-          <div class="flex flex-wrap gap-2">
+          <div class="flex flex-wrap gap-4">
             <!--div7 border-country name-->
             {#if borderCountries?.length}
               {#each borderCountries as code}
                 <button
                   onclick={() => openBorder(code.name.common)}
-                  class=" items-center rounded-md border px-3 py-1 text-sm border-secondary
-                 bg-secondary hover:bg-primary hover:text-background
-                  shadow-sm"
+                  class="rounded-md w-25 h-7 text-sm
+                 hover:opacity-80
+                  shadow"
                 >
                   {code.name.common}
                 </button>
               {/each}
             {:else}
-              <h2>No border</h2>
+              <h2>No Border Countries</h2>
             {/if}
           </div>
         </div>
       </div>
     {:else}
-      <p class="p-8">Loading country data…</p>
+      <p class="justify-center items-center">Loading country data…</p>
     {/if}
   </div>
 </div>

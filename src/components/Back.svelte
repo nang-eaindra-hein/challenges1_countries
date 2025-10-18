@@ -13,10 +13,11 @@
 
 <button
   onclick={goBack}
-  class="ms-15 text-text bg-secondary border-secondary border flex justify-center items-center shadow-lgrounded-lg w-40 h-10 text-sm"
+  class="ms-20 hover:opacity-50 transition-opacity duration-150 text-text bg-secondary flex
+   justify-center items-center shadow-md p-4 py-2 text-sm rounded-lg"
 >
   <!--back btn-->
 
-  <MoveLeft />
+  <MoveLeft class="me-2" />
   Back
 </button>

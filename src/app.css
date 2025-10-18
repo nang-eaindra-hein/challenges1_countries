@@ -5,9 +5,9 @@
 
     :root{
         --text:#080d0a;
-        --background:#f2f8f4;
+        --background:#f0f4f2;
         --primary:hsl(204, 5%, 19%);
-        --secondary:hsl(0, 5%, 93%);
+        --secondary:hsl(0, 0%, 100%);
         --third:hsl(0,0%,99%);
     }
 
@@ -41,4 +41,17 @@
         max-width: 1200px;
         margin: 0 auto;
     }
+}
+.shadow{
+    box-shadow: rgba(50, 50, 93, 0.25) 
+    0px 13px 27px -5px, 
+    rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+button, a {
+    cursor: pointer;
+}
+
+body {
+    background-color: var(--color-background);
 }

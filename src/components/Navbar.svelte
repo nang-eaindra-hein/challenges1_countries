@@ -21,19 +21,22 @@
 </script>
 
 <div
-  class="border border-primary bg-secondary flex p-8 justify-between shadow-md transition-colors duration-500 ease-in-out"
+  class="border-primary bg-secondary flex p-5 justify-between items-center shadow-xl ease-in-out transition-colors duration-150"
 >
-  <div class="font-bold text-xl text-text">
+  <div class="font-semibold ms-15 text-lg text-text hover:opacity-50">
     <a href="/"> <h1>Where is the world?</h1></a>
   </div>
 
-  <button onclick={toggleDark}>
+  <button
+    onclick={toggleDark}
+    class="flex text-sm me-15 font-light hover:opacity-50"
+  >
     {#if isDark}
-      <Moon class="text-text" />
-      <div class="ms-1 text-text">LightMode</div>
+      <Moon class="text-white w-5 h-5 " />
+      <div class="ms-1 text-text">Light Mode</div>
     {:else}
-      <Moon class="text-text" />
-      <div class="ms-1 text-text">DarkMode</div>
+      <Moon class="text-text w-5 h-5" />
+      <div class="ms-1 text-text">Dark Mode</div>
     {/if}
   </button>
 </div>
